@@ -1,0 +1,27 @@
+# Kazzy Agent Trading System Dependencies
+
+# Web Framework
+fastapi>=0.104.0
+uvicorn[standard]>=0.24.0
+python-multipart>=0.0.6
+
+# Trading & Finance
+ccxt>=4.0.0
+pandas>=2.0.0
+numpy>=1.24.0
+
+# MetaTrader (optional - for Windows)
+# MetaTrader5>=5.0.45
+
+# Security
+python-jose[cryptography]>=3.3.0
+passlib[bcrypt]>=1.7.4
+
+# Utilities
+python-dotenv>=1.0.0
+aiofiles>=23.0.0
+pydantic>=2.0.0
+pydantic-settings>=2.0.0
+
+# Logging
+loguru>=0.7.0
