@@ -492,7 +492,7 @@ function App() {
   const navItems = [
     { id: 'dashboard', icon: LayoutDashboard, label: 'Dashboard' },
     { id: 'portfolio', icon: Wallet, label: 'Portfolio' },
-    { id: 'automation', icon: AutoMode, label: 'Automation' },
+    { id: 'automation', icon: Rocket, label: 'Automation' },
     { id: 'signals', icon: Radio, label: 'Signals' },
     { id: 'settings', icon: Settings, label: 'Settings' },
   ]

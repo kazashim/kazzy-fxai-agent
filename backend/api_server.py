@@ -418,6 +418,158 @@ async def emergency_stop():
     }
 
 
+# AI Endpoints
+
+# Enable AI autonomous trading
+@app.post("/api/ai/enable")
+async def enable_ai():
+    """Enable AI autonomous trading"""
+    if not trading_engine:
+        raise HTTPException(status_code=500, detail="Trading engine not initialized")
+
+    trading_engine.enable_ai()
+
+    await manager.broadcast({
+        "type": "ai_enabled",
+        "timestamp": datetime.now().isoformat()
+    })
+
+    return {
+        "success": True,
+        "message": "AI Autonomous Trading Enabled"
+    }
+
+
+# Disable AI autonomous trading
+@app.post("/api/ai/disable")
+async def disable_ai():
+    """Disable AI autonomous trading"""
+    if not trading_engine:
+        raise HTTPException(status_code=500, detail="Trading engine not initialized")
+
+    trading_engine.disable_ai()
+
+    await manager.broadcast({
+        "type": "ai_disabled",
+        "timestamp": datetime.now().isoformat()
+    })
+
+    return {
+        "success": True,
+        "message": "AI Autonomous Trading Disabled"
+    }
+
+
+# AI Analysis
+@app.get("/api/ai/analyze/{exchange}/{symbol}")
+async def ai_analyze(exchange: str, symbol: str):
+    """Get AI analysis for a symbol"""
+    if not trading_engine:
+        raise HTTPException(status_code=500, detail="Trading engine not initialized")
+
+    analysis = await trading_engine.analyze_with_ai(exchange, symbol)
+
+    if not analysis:
+        raise HTTPException(status_code=404, detail="Analysis failed - check exchange connection")
+
+    return {
+        "symbol": symbol,
+        "exchange": exchange,
+        "analysis": analysis
+    }
+
+
+# AI Signal Generation
+@app.get("/api/ai/signals/{exchange}")
+async def ai_signals(exchange: str, symbols: str = "BTC/USDT,ETH/USDT"):
+    """Generate AI signals for multiple symbols"""
+    if not trading_engine:
+        raise HTTPException(status_code=500, detail="Trading engine not initialized")
+
+    symbol_list = [s.strip() for s in symbols.split(',')]
+    signals = await trading_engine.generate_ai_signals(exchange, symbol_list)
+
+    return {
+        "exchange": exchange,
+        "signals": signals,
+        "count": len(signals)
+    }
+
+
+# AI NLP Command
+@app.post("/api/ai/command")
+async def ai_command(command: Dict[str, str]):
+    """Process NLP command through AI"""
+    if not trading_engine:
+        raise HTTPException(status_code=500, detail="Trading engine not initialized")
+
+    result = await trading_engine.process_ai_command(command.get('command', ''))
+
+    await manager.broadcast({
+        "type": "ai_command",
+        "command": command.get('command'),
+        "result": result
+    })
+
+    return result
+
+
+# Run AI Automation
+@app.post("/api/ai/automate/{exchange}")
+async def run_ai_automation(exchange: str, symbols: str = "BTC/USDT,ETH/USDT"):
+    """Run AI automation for autonomous trading"""
+    if not trading_engine:
+        raise HTTPException(status_code=500, detail="Trading engine not initialized")
+
+    if not trading_engine.ai_enabled:
+        return {
+            "success": False,
+            "message": "AI is not enabled. Enable AI first."
+        }
+
+    symbol_list = [s.strip() for s in symbols.split(',')]
+    trades = await trading_engine.run_ai_automation(exchange, symbol_list)
+
+    await manager.broadcast({
+        "type": "ai_automation",
+        "executed_trades": len(trades),
+        "timestamp": datetime.now().isoformat()
+    })
+
+    return {
+        "success": True,
+        "executed_trades": len(trades),
+        "trades": trades
+    }
+
+
+# AI Learning Recommendations
+@app.get("/api/ai/recommendations")
+async def ai_recommendations():
+    """Get AI recommendations based on learning"""
+    if not trading_engine or not trading_engine.ai_learning_system:
+        raise HTTPException(status_code=500, detail="AI learning system not initialized")
+
+    recommendations = trading_engine.ai_learning_system.get_recommendations()
+
+    return recommendations
+
+
+# AI Should Continue Trading
+@app.get("/api/ai/should_continue")
+async def ai_should_continue():
+    """Check if AI should continue trading"""
+    if not trading_engine or not trading_engine.ai_learning_system:
+        return {"should_continue": True, "reason": "AI not initialized"}
+
+    should_continue = trading_engine.ai_learning_system.should_continue_trading()
+
+    return {
+        "should_continue": should_continue,
+        "reason": "Trading allowed" if should_continue else "AI recommends pause"
+    }
+
+
 # WebSocket endpoint for real-time updates
 @app.websocket("/ws")
 async def websocket_endpoint(websocket: WebSocket):

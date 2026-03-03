@@ -28,11 +28,18 @@ class KazzyTradingEngine:
 
     def __init__(self):
         self.is_running = False
+        self.ai_enabled = False
         self.exchanges: Dict[str, Any] = {}
         self.positions: Dict[str, Any] = {}
         self.strategies: Dict[str, Any] = {}
         self.risk_manager = None
         self.order_executor = None
+        # AI Components
+        self.ai_analyzer = None
+        self.ai_decision_engine = None
+        self.ai_signal_generator = None
+        self.ai_nlp_processor = None
+        self.ai_learning_system = None
 
     async def initialize(self):
         """Initialize all trading components"""
@@ -50,6 +57,9 @@ class KazzyTradingEngine:
         from order_executor import OrderExecutor
         self.order_executor = OrderExecutor(self.risk_manager)
 
+        # Initialize AI Core components
+        await self._initialize_ai_core()
+
         # Initialize exchange connectors
         await self._initialize_exchanges()
 
@@ -57,6 +67,17 @@ class KazzyTradingEngine:
         await self._initialize_strategies()
 
         logger.info("✅ Kazzy Agent initialized successfully")
+
+    async def _initialize_ai_core(self):
+        """Initialize AI Core components"""
+        from ai_core import MarketAnalyzer, AIDecisionEngine, SignalGenerator, NLPProcessor, AILearningSystem
+
+        self.ai_analyzer = MarketAnalyzer()
+        self.ai_decision_engine = AIDecisionEngine(self.risk_manager)
+        self.ai_signal_generator = SignalGenerator()
+        self.ai_learning_system = AILearningSystem()
+
+        logger.info("🤖 AI Core initialized")
 
     async def _initialize_exchanges(self):
         """Initialize exchange connections"""
@@ -257,10 +278,131 @@ class KazzyTradingEngine:
 
         return {
             'is_running': self.is_running,
+            'ai_enabled': self.ai_enabled,
             'exchanges': exchange_status,
             'active_strategies': list(self.strategies.keys()),
             'open_positions': len(self.positions)
         }
+
+    def enable_ai(self):
+        """Enable AI autonomous trading"""
+        self.ai_enabled = True
+        logger.info("🤖 AI Autonomous Trading ENABLED")
+
+    def disable_ai(self):
+        """Disable AI autonomous trading"""
+        self.ai_enabled = False
+        logger.info("🤖 AI Autonomous Trading DISABLED")
+
+    async def analyze_with_ai(self, exchange_name: str, symbol: str) -> Optional[Dict]:
+        """Analyze market using AI"""
+        if not self.ai_analyzer:
+            logger.error("AI Analyzer not initialized")
+            return None
+
+        connector = self.exchanges.get(exchange_name)
+        if not connector or not connector.is_connected:
+            logger.error(f"Exchange not connected: {exchange_name}")
+            return None
+
+        # Get market data
+        market_data = await connector.get_market_data(symbol, '1h', 100)
+        if not market_data:
+            return None
+
+        # Run AI analysis
+        analysis = await self.ai_analyzer.analyze_market(symbol, market_data)
+
+        return analysis
+
+    async def generate_ai_signals(self, exchange_name: str, symbols: list) -> list:
+        """Generate AI trading signals for multiple symbols"""
+        if not self.ai_signal_generator:
+            logger.error("AI Signal Generator not initialized")
+            return []
+
+        connector = self.exchanges.get(exchange_name)
+        if not connector or not connector.is_connected:
+            logger.error(f"Exchange not connected: {exchange_name}")
+            return []
+
+        # Get market data for all symbols
+        market_data = {}
+        for symbol in symbols:
+            data = await connector.get_market_data(symbol, '1h', 100)
+            if data:
+                market_data[symbol] = data
+
+        # Generate signals
+        signals = await self.ai_signal_generator.generate_signals(symbols, market_data)
+
+        return signals
+
+    async def process_ai_command(self, command: str) -> Dict:
+        """Process NLP command through AI"""
+        if not self.ai_decision_engine:
+            logger.error("AI Decision Engine not initialized")
+            return {'action': 'UNKNOWN', 'reason': 'AI not initialized'}
+
+        # Initialize NLP processor with decision engine
+        from ai_core import NLPProcessor
+        nlp = NLPProcessor(self.ai_decision_engine)
+
+        result = await nlp.process_command(command)
+
+        return result
+
+    async def run_ai_automation(self, exchange_name: str, symbols: list) -> list:
+        """Run AI automation for autonomous trading"""
+        if not self.ai_enabled:
+            logger.info("AI is disabled, skipping automation")
+            return []
+
+        if not self.ai_decision_engine:
+            logger.error("AI Decision Engine not initialized")
+            return []
+
+        executed_trades = []
+
+        # Generate signals for all symbols
+        signals = await self.generate_ai_signals(exchange_name, symbols)
+
+        for signal in signals:
+            # Check confidence threshold
+            if signal.get('confidence', 0) < 70:
+                continue
+
+            # Execute high confidence signals
+            try:
+                result = await self.execute_trade(
+                    exchange_name=exchange_name,
+                    symbol=signal['symbol'],
+                    side=signal['direction'],
+                    quantity=0.01,  # Will be calculated by risk manager
+                    order_type='market',
+                    stop_loss=float(signal.get('stop_loss', 0)),
+                    take_profit=float(signal.get('take_profit', 0))
+                )
+
+                if result:
+                    executed_trades.append({
+                        'signal': signal,
+                        'result': result
+                    })
+
+                    # Record trade for learning
+                    if self.ai_learning_system:
+                        self.ai_learning_system.record_trade({
+                            'symbol': signal['symbol'],
+                            'strategy': 'ai_signal',
+                            'pnl': 0,  # Will be updated when position closes
+                            'side': signal['direction']
+                        })
+
+            except Exception as e:
+                logger.error(f"Error executing AI trade: {e}")
+
+        return executed_trades
 
 
 # Global trading engine instance
