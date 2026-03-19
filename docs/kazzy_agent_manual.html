@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kazzy Agent - Complete User Guide</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px;
+        }
+
+        .cover-page {
+            text-align: center;
+            padding: 100px 0;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: white;
+            margin: -40px -40px 40px -40px;
+            padding: 120px 40px;
+        }
+
+        .cover-page h1 {
+            font-size: 48px;
+            margin-bottom: 10px;
+            letter-spacing: 2px;
+        }
+
+        .cover-page .subtitle {
+            font-size: 24px;
+            opacity: 0.8;
+            margin-bottom: 40px;
+        }
+
+        .cover-page .description {
+            font-size: 16px;
+            opacity: 0.7;
+        }
+
+        .cover-page .version {
+            margin-top: 60px;
+            font-size: 14px;
+            opacity: 0.6;
+        }
+
+        h1 {
+            color: #1a1a2e;
+            font-size: 28px;
+            margin: 40px 0 20px 0;
+            border-bottom: 3px solid #4361ee;
+            padding-bottom: 10px;
+        }
+
+        h2 {
+            color: #2d3748;
+            font-size: 22px;
+            margin: 30px 0 15px 0;
+        }
+
+        h3 {
+            color: #4a5568;
+            font-size: 18px;
+            margin: 25px 0 10px 0;
+        }
+
+        p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+
+        ul, ol {
+            margin: 15px 0 15px 30px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        .warning {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 20px 0;
+        }
+
+        .danger {
+            background: #f8d7da;
+            border-left: 4px solid #dc3545;
+            padding: 15px;
+            margin: 20px 0;
+        }
+
+        .info {
+            background: #d1ecf1;
+            border-left: 4px solid #17a2b8;
+            padding: 15px;
+            margin: 20px 0;
+        }
+
+        .success {
+            background: #d4edda;
+            border-left: 4px solid #28a745;
+            padding: 15px;
+            margin: 20px 0;
+        }
+
+        code {
+            background: #f4f4f4;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+        }
+
+        pre {
+            background: #1a1a2e;
+            color: #e0e0e0;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 20px 0;
+        }
+
+        pre code {
+            background: none;
+            padding: 0;
+            color: inherit;
+        }
+
+        .platform-section {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+
+        .platform-section h3 {
+            color: #4361ee;
+            margin-top: 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background: #1a1a2e;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background: #f9f9f9;
+        }
+
+        .toc {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 8px;
+            margin: 30px 0;
+        }
+
+        .toc h2 {
+            margin-top: 0;
+        }
+
+        .toc ul {
+            columns: 2;
+        }
+
+        .disclaimer {
+            font-size: 12px;
+            color: #666;
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+        }
+    </style>
+</head>
+<body>
+
+<div class="cover-page">
+    <h1>KAZZY AGENT</h1>
+    <p class="subtitle">Automated Trading System</p>
+    <p class="description">Complete User Guide<br>API Integration & Trading Platform Setup</p>
+    <p class="version">Version 1.0 | March 2026</p>
+</div>
+
+<div class="toc">
+    <h2>Table of Contents</h2>
+    <ul>
+        <li><a href="#introduction">1. Introduction to Kazzy Agent</a></li>
+        <li><a href="#features">2. Key Features</a></li>
+        <li><a href="#platforms">3. Supported Trading Platforms</a></li>
+        <li><a href="#api-setup">4. Platform API Setup Guide</a></li>
+        <li><a href="#configuration">5. Configuration & Setup</a></li>
+        <li><a href="#auto-trading">6. Auto-Trading Configuration</a></li>
+        <li><a href="#live-feeds">7. Live Trading Feeds</a></li>
+        <li><a href="#ai-integration">8. AI Integration</a></li>
+        <li><a href="#security">9. Security Best Practices</a></li>
+        <li><a href="#troubleshooting">10. Troubleshooting</a></li>
+    </ul>
+</div>
+
+<h1 id="introduction">1. Introduction to Kazzy Agent</h1>
+
+<p>Kazzy Agent is an advanced AI-powered automated trading system designed to connect to multiple trading platforms and execute trades autonomously. This comprehensive guide will help you set up and configure your trading accounts to maximize the potential of automated trading.</p>
+
+<p>Kazzy Agent serves as a bridge between retail traders and professional-grade trading infrastructure, enabling anyone with basic technical knowledge to leverage sophisticated trading strategies that were previously available only to institutional traders.</p>
+
+<div class="warning">
+    <strong>⚠️ Financial Risk Warning:</strong> Automated trading involves substantial risk. Past performance does not guarantee future results. Always start with testnet accounts and small position sizes. Never trade with money you cannot afford to lose.
+</div>
+
+<h1 id="features">2. Key Features</h1>
+
+<p>Kazzy Agent offers a comprehensive suite of features designed for both beginner and advanced traders:</p>
+
+<ul>
+    <li><strong>Universal Exchange Connectivity:</strong> Connect to 30+ trading platforms through a unified interface</li>
+    <li><strong>Real-Time Market Data:</strong> Live streaming prices from all connected exchanges</li>
+    <li><strong>AI-Powered Analysis:</strong> Advanced market analysis using machine learning algorithms</li>
+    <li><strong>Automated Trading:</strong> Execute trades automatically based on configurable strategies</li>
+    <li><strong>Risk Management:</strong> Built-in stop-loss, take-profit, and position sizing controls</li>
+    <li><strong>Multi-Asset Support:</strong> Trade Forex, Crypto, Stocks, Commodities, Indices, Options, Futures, Bonds, and CFDs</li>
+    <li><strong>Poe AI Integration:</strong> Access multiple AI models including Claude, GPT-4, Llama, and Gemini</li>
+    <li><strong>Portfolio Analytics:</strong> Track performance across all exchanges from a single dashboard</li>
+</ul>
+
+<h1 id="platforms">3. Supported Trading Platforms</h1>
+
+<h2>3.1 Forex Platforms</h2>
+<ul>
+    <li>MetaTrader 4 (MT4)</li>
+    <li>MetaTrader 5 (MT5)</li>
+    <li>cTrader</li>
+    <li>FXCM</li>
+    <li>IC Markets</li>
+</ul>
+
+<h2>3.2 Cryptocurrency Exchanges</h2>
+<ul>
+    <li>Binance</li>
+    <li>Coinbase</li>
+    <li>Bybit</li>
+    <li>Kraken</li>
+    <li>KuCoin</li>
+    <li>OKX</li>
+</ul>
+
+<h2>3.3 Stock Trading Platforms</h2>
+<ul>
+    <li>Interactive Brokers (IBKR)</li>
+    <li>Alpaca</li>
+    <li>TD Ameritrade</li>
+    <li>Fidelity</li>
+    <li>Charles Schwab</li>
+</ul>
+
+<h2>3.4 Commodities & Indices</h2>
+<ul>
+    <li>Precious Metals (Gold, Silver, Platinum)</li>
+    <li>Energy (Oil, Natural Gas)</li>
+    <li>US Indices (Dow, S&P 500, Nasdaq)</li>
+    <li>European Indices (FTSE, DAX, CAC)</li>
+</ul>
+
+<h2>3.5 Options, Futures, Bonds & CFDs</h2>
+<ul>
+    <li>IBKR Options</li>
+    <li>ThinkOrSwim</li>
+    <li>CME Group</li>
+    <li>US Treasury Bonds</li>
+    <li>Corporate Bonds</li>
+    <li>MT5 CFDs</li>
+    <li>IG Markets</li>
+    <li>OANDA</li>
+</ul>
+
+<h1 id="api-setup">4. Platform API Setup Guide</h1>
+
+<div class="danger">
+    <strong>🔴 CRITICAL SECURITY:</strong> Never enable "Withdrawal" permissions on your API keys. Only enable permissions necessary for trading. Always restrict API access to specific IP addresses when possible.
+</div>
+
+<h2>4.1 Binance API Setup</h2>
+
+<div class="platform-section">
+    <h3>Step-by-Step Instructions</h3>
+
+    <ol>
+        <li>Log in to your Binance account at <strong>https://www.binance.com</strong></li>
+        <li>Navigate to <strong>Profile → API Management</strong> (or click your profile icon and select API)</li>
+        <li>Click the <strong>"Create API"</strong> button</li>
+        <li>Enter a unique label for your API key (e.g., "KazzyAgent")</li>
+        <li>Complete security verification (2FA)</li>
+        <li><strong>Important:</strong> Copy your API Key and Secret Key immediately - the Secret Key will not be shown again</li>
+        <li>Edit the API key permissions:
+            <ul>
+                <li>Enable <strong>Reading</strong> permission</li>
+                <li>Enable <strong>Trading</strong> permission (required for auto-trading)</li>
+                <li><strong>Disable</strong> Withdrawals permission</li>
+            </ul>
+        </li>
+        <li>(Optional) Set IP restrictions for enhanced security</li>
+    </ol>
+
+    <div class="info">
+        <strong>ℹ️ Note:</strong> Binance offers testnet for testing. Use testnet keys for initial setup and validation before connecting live accounts.
+    </div>
+</div>
+
+<h2>4.2 MetaTrader 5 (MT5) API Setup</h2>
+
+<div class="platform-section">
+    <h3>Option A: MetaQuotes Cloud (Recommended)</h3>
+
+    <ol>
+        <li>Download and install MT5 terminal from <strong>https://www.metatrader5.com/</strong></li>
+        <li>Create or log into your MT5 account</li>
+        <li>Go to <strong>Tools → Options → API</strong></li>
+        <li>Enable <strong>API access</strong> checkbox</li>
+        <li>Note the server address and login credentials</li>
+        <li>Use these credentials to connect through Kazzy Agent</li>
+    </ol>
+
+    <h3>Option B: Third-Party REST API</h3>
+
+    <ol>
+        <li>Register at <strong>https://metatraderapi.cloud/</strong></li>
+        <li>Follow their setup guide to obtain API credentials</li>
+        <li>Use the provided credentials in Kazzy Agent</li>
+    </ol>
+</div>
+
+<h2>4.3 Coinbase API Setup</h2>
+
+<div class="platform-section">
+    <h3>Step-by-Step Instructions</h3>
+
+    <ol>
+        <li>Log in to Coinbase at <strong>https://www.coinbase.com</strong></li>
+        <li>Go to <strong>Settings → API Access</strong></li>
+        <li>Click <strong>"+ New API Key"</strong></li>
+        <li>Configure permissions:
+            <ul>
+                <li>✅ <strong>View</strong> permission - Required</li>
+                <li>✅ <strong>Trade</strong> permission - Required for trading</li>
+                <li>❌ <strong>Transfer</strong> permission - <strong>DO NOT ENABLE</strong></li>
+            </ul>
+        </li>
+        <li>Add your IP address to the whitelist (if required)</li>
+        <li>Save your API Key and Secret</li>
+    </ol>
+</div>
+
+<h2>4.4 Bybit API Setup</h2>
+
+<div class="platform-section">
+    <h3>Step-by-Step Instructions</h3>
+
+    <ol>
+        <li>Log in to Bybit at <strong>https://www.bybit.com</strong></li>
+        <li>Click your profile icon in the top-right corner</li>
+        <li>Select <strong>API</strong> from the menu</li>
+        <li>Click <strong>"Create New Key"</strong></li>
+        <li>Enter a name for your API key</li>
+        <li>Select permissions:
+            <ul>
+                <li>✅ <strong>Read</strong> permission</li>
+                <li>✅ <strong>Trade</strong> permission</li>
+                <li>❌ <strong>Withdraw</strong> permission - <strong>DO NOT ENABLE</strong></li>
+            </ul>
+        </li>
+        <li>Complete security verification (Google Authenticator)</li>
+        <li>Copy your API Key and Secret immediately</li>
+    </ol>
+</div>
+
+<h2>4.5 Interactive Brokers (IBKR) API Setup</h2>
+
+<div class="platform-section">
+    <h3>Step-by-Step Instructions</h3>
+
+    <ol>
+        <li>Log in to IBKR Client Portal at <strong>https://portal.interactivebrokers.com</strong></li>
+        <li>Navigate to <strong>Settings → API Settings</strong></li>
+        <li>Click <strong>"Create API Key"</strong></li>
+        <li>Configure permissions:
+            <ul>
+                <li>Read market data</li>
+                <li>Place orders</li>
+                <li>View positions</li>
+            </ul>
+        </li>
+        <li>Set IP restrictions (recommended)</li>
+        <li>Download and save your credentials</li>
+    </ol>
+
+    <div class="info">
+        <strong>ℹ️ Note:</strong> IBKR requires the Trader Workstation (TWS) to be running for API connections. Make sure TWS is installed and logged in.
+    </div>
+</div>
+
+<h2>4.6 Kraken API Setup</h2>
+
+<div class="platform-section">
+    <h3>Step-by-Step Instructions</h3>
+
+    <ol>
+        <li>Log in to Kraken at <strong>https://www.kraken.com</strong></li>
+        <li>Go to <strong>Security → API</strong></li>
+        <li>Click <strong>"Generate New Key"</strong></li>
+        <li>Set key permissions:
+            <ul>
+                <li>✅ <strong>Query</strong> funds/ledger/trade</li>
+                <li>✅ <strong>Query</strong> open orders/trades</li>
+                <li>✅ <strong>Create</strong> and close orders</li>
+                <li>❌ <strong>Withdrawal</strong> funds - <strong>DO NOT ENABLE</strong></li>
+            </ul>
+        </li>
+        <li>Add IP whitelist if desired</li>
+        <li>Copy both the <strong>API Key</strong> and <strong>Private Key</strong></li>
+    </ol>
+</div>
+
+<h2>4.7 Connecting to Kazzy Agent</h2>
+
+<p>After obtaining your API keys from any exchange:</p>
+
+<ol>
+    <li>Open the Kazzy Agent dashboard</li>
+    <li>Navigate to the <strong>Settings</strong> tab</li>
+    <li>Select your trading platform from the list</li>
+    <li>Enter your <strong>API Key</strong> and <strong>API Secret</strong></li>
+    <li>Toggle <strong>"Testnet"</strong> for testing before live trading</li>
+    <li>Click <strong>"Connect Exchange"</strong></li>
+    <li>Verify connection status shows "Connected"</li>
+</ol>
+
+<h1 id="configuration">5. Configuration & Setup</h1>
+
+<h2>5.1 Initial Setup</h2>
+
+<p>After installing Kazzy Agent, follow these configuration steps:</p>
+
+<ol>
+    <li><strong>Backend Server:</strong> Start the API server
+    <pre><code>cd backend
+python api_server.py</code></pre>
+    </li>
+    <li><strong>Frontend:</strong> Access the web interface at the provided URL</li>
+    <li><strong>First Run:</strong> Complete the setup wizard to configure basic settings</li>
+</ol>
+
+<h2>5.2 API Endpoints</h2>
+
+<p>Kazzy Agent provides the following API endpoints for integration:</p>
+
+<table>
+    <tr>
+        <th>Endpoint</th>
+        <th>Method</th>
+        <th>Description</th>
+    </tr>
+    <tr>
+        <td><code>/api/connect</code></td>
+        <td>POST</td>
+        <td>Connect to exchange</td>
+    </tr>
+    <tr>
+        <td><code>/api/balance/{exchange}</code></td>
+        <td>GET</td>
+        <td>Get account balance</td>
+    </tr>
+    <tr>
+        <td><code>/api/positions/{exchange}</code></td>
+        <td>GET</td>
+        <td>Get open positions</td>
+    </tr>
+    <tr>
+        <td><code>/api/trade</code></td>
+        <td>POST</td>
+        <td>Execute a trade</td>
+    </tr>
+    <tr>
+        <td><code>/api/feeds/start</code></td>
+        <td>POST</td>
+        <td>Start live feeds</td>
+    </tr>
+    <tr>
+        <td><code>/api/auto/start</code></td>
+        <td>POST</td>
+        <td>Start auto-trading</td>
+    </tr>
+</table>
+
+<h1 id="auto-trading">6. Auto-Trading Configuration</h1>
+
+<h2>6.1 Enabling Auto-Trading</h2>
+
+<p>Kazzy Agent can automatically execute trades based on AI-generated signals. Here's how to enable it:</p>
+
+<ol>
+    <li>Connect at least one exchange with valid API keys</li>
+    <li>Navigate to the <strong>Automation</strong> tab in the dashboard</li>
+    <li>Enable the <strong>"Master Control"</strong> toggle</li>
+    <li>Configure your risk parameters:
+        <ul>
+            <li><strong>Max Risk per Trade:</strong> Recommended 1-2%</li>
+            <li><strong>Max Daily Loss:</strong> Recommended 5-10%</li>
+            <li><strong>Maximum Open Positions:</strong> Based on your risk tolerance</li>
+        </ul>
+    </li>
+    <li>Select trading strategies:
+        <ul>
+            <li><strong>RSI Mean Reversion:</strong> Buy oversold, sell overbought</li>
+            <li><strong>MA Crossover:</strong> Trend-following strategy</li>
+            <li><strong>Grid Trading:</strong> Range-bound markets</li>
+        </ul>
+    </li>
+    <li>Click <strong>"Start Auto-Trading"</strong></li>
+</ol>
+
+<div class="warning">
+    <strong>⚠️ Risk Warning:</strong> Always configure risk parameters before enabling auto-trading. Start with conservative settings and adjust based on performance.
+</div>
+
+<h2>6.2 AI Signal Generation</h2>
+
+<p>Kazzy Agent analyzes markets using multiple technical indicators:</p>
+
+<ul>
+    <li><strong>RSI (Relative Strength Index):</strong> Identifies overbought/oversold conditions</li>
+    <li><strong>MACD:</strong> Trend momentum and potential reversals</li>
+    <li><strong>Moving Averages:</strong> Support and resistance levels</li>
+    <li><strong>Volume Analysis:</strong> Confirms price movements</li>
+    <li><strong>Pattern Recognition:</strong> Identifies chart patterns</li>
+</ul>
+
+<p>Each signal includes a confidence score (0-100%) to help you assess trade quality.</p>
+
+<h2>6.3 Risk Management</h2>
+
+<table>
+    <tr>
+        <th>Risk Level</th>
+        <th>Risk per Trade</th>
+        <th>Max Daily Loss</th>
+        <th>Suitable For</th>
+    </tr>
+    <tr>
+        <td>Conservative</td>
+        <td>1-2%</td>
+        <td>5%</td>
+        <td>Beginners, small accounts</td>
+    </tr>
+    <tr>
+        <td>Moderate</td>
+        <td>2-5%</td>
+        <td>10%</td>
+        <td>Experienced traders</td>
+    </tr>
+    <tr>
+        <td>Aggressive</td>
+        <td>5-10%</td>
+        <td>20%</td>
+        <td>Advanced traders only</td>
+    </tr>
+</table>
+
+<h1 id="live-feeds">7. Live Trading Feeds</h1>
+
+<p>Kazzy Agent provides real-time streaming data from all connected exchanges through WebSocket connections.</p>
+
+<h2>7.1 Available Feed Types</h2>
+
+<ul>
+    <li><strong>Ticker Prices:</strong> Real-time bid/ask prices for all symbols</li>
+    <li><strong>Order Book:</strong> Market depth visualization</li>
+    <li><strong>Positions:</strong> Live position tracking and P&L</li>
+    <li><strong>Balance:</strong> Account equity updates in real-time</li>
+    <li><strong>System:</strong> Trade execution notifications and alerts</li>
+</ul>
+
+<h2>7.2 Enabling Live Feeds</h2>
+
+<ol>
+    <li>Navigate to the <strong>Dashboard</strong> tab</li>
+    <li>Locate the <strong>Live Feeds</strong> panel</li>
+    <li>Click <strong>"Start Live Feeds"</strong></li>
+    <li>Prices will begin updating in real-time</li>
+    <li>Use <strong>"Stop Live Feeds"</strong> to pause streaming</li>
+</ol>
+
+<h2>7.3 WebSocket Integration</h2>
+
+<p>For developers who want to integrate Kazzy Agent feeds into their own applications:</p>
+
+<pre><code>const ws = new WebSocket('ws://your-server:8000/ws');
+
+ws.onmessage = (event) => {
+    const data = JSON.parse(event.data);
+    console.log('Live update:', data);
+};</code></pre>
+
+<h1 id="ai-integration">8. AI Integration</h1>
+
+<h2>8.1 Poe AI Integration</h2>
+
+<p>Kazzy Agent uses Poe's AI API for advanced market analysis and decision-making. Multiple AI models are available:</p>
+
+<table>
+    <tr>
+        <th>Model</th>
+        <th>Provider</th>
+        <th>Best For</th>
+    </tr>
+    <tr>
+        <td>Claude 4 Opus</td>
+        <td>Anthropic</td>
+        <td>Deep analysis, complex reasoning</td>
+    </tr>
+    <tr>
+        <td>Claude 4 Sonnet</td>
+        <td>Anthropic</td>
+        <td>Balanced performance</td>
+    </tr>
+    <tr>
+        <td>GPT-4o</td>
+        <td>OpenAI</td>
+        <td>General purpose, multimodal</td>
+    </tr>
+    <tr>
+        <td>GPT-4 Turbo</td>
+        <td>OpenAI</td>
+        <td>Fast responses</td>
+    </tr>
+    <tr>
+        <td>Llama 3.1 405B</td>
+        <td>Meta</td>
+        <td>Open source option</td>
+    </tr>
+    <tr>
+        <td>Grok 4</td>
+        <td>xAI</td>
+        <td>Reasoning tasks</td>
+    </tr>
+    <tr>
+        <td>Gemini 1.5 Pro</td>
+        <td>Google</td>
+        <td>Multimodal analysis</td>
+    </tr>
+</table>
+
+<h2>8.2 Setting Up Poe API</h2>
+
+<ol>
+    <li>Go to <strong>https://poe.com</strong> and create an account</li>
+    <li>Subscribe to a plan (free tier available for testing)</li>
+    <li>Navigate to <strong>Settings → API</strong></li>
+    <li>Generate your API key</li>
+    <li>In Kazzy Agent, go to <strong>Settings</strong></li>
+    <li>Enter your Poe API key</li>
+    <li>Select your preferred AI model</li>
+    <li>Save settings</li>
+</ol>
+
+<h2>8.3 AI Learning System</h2>
+
+<p>Kazzy Agent continuously learns from your trading data to improve performance:</p>
+
+<ul>
+    <li><strong>Pattern Detection:</strong> Identifies recurring market patterns</li>
+    <li><strong>Performance Analysis:</strong> Tracks win rate, profit factor, drawdown</li>
+    <li><strong>Strategy Optimization:</strong> Suggests parameter adjustments</li>
+    <li><strong>Risk Assessment:</strong> Evaluates portfolio risk in real-time</li>
+</ul>
+
+<h1 id="security">9. Security Best Practices</h1>
+
+<div class="danger">
+    <strong>🔴 SECURITY IS Paramount:</strong> Failure to follow these guidelines may result in loss of funds. Always prioritize security when configuring automated trading systems.
+</div>
+
+<h2>9.1 API Key Security</h2>
+
+<ul>
+    <li><strong>Never share</strong> your API keys with anyone</li>
+    <li><strong>Enable IP restrictions</strong> on API keys when possible</li>
+    <li>Use <strong>Read-Only</strong> permissions if you only need data</li>
+    <li>Enable <strong>Trade</strong> permissions only when actively using auto-trading</li>
+    <li><strong>Regularly rotate</strong> your API keys (every 30-90 days)</li>
+    <li>Never store API keys in <strong>plain text</strong> files</li>
+    <li>Use environment variables or secure password managers</li>
+</ul>
+
+<h2>9.2 Exchange Account Protection</h2>
+
+<ul>
+    <li>Enable <strong>Two-Factor Authentication (2FA)</strong> on all exchanges</li>
+    <li>Use <strong>unique, strong passwords</strong></li>
+    <li>Monitor your accounts <strong>regularly</strong></li>
+    <li>Set up <strong>withdrawal address whitelisting</strong></li>
+    <li>Review API permissions <strong>monthly</strong></li>
+    <li>Enable <strong>login alerts</strong> for account access</li>
+</ul>
+
+<h2>9.3 Trading Risk Controls</h2>
+
+<p>Always configure these before enabling auto-trading:</p>
+
+<ul>
+    <li><strong>Maximum risk per trade:</strong> 1-2% of account balance</li>
+    <li><strong>Daily loss limit:</strong> 5-10% of account balance</li>
+    <li><strong>Maximum concurrent positions:</strong> Based on risk tolerance</li>
+    <li><strong>Emergency stop button:</strong> Ensure it's always accessible</li>
+</ul>
+
+<div class="warning">
+    <strong>⚠️ Emergency Stop:</strong> Familiarize yourself with the emergency stop function. In case of unexpected behavior, immediately stop all trading to prevent further losses.
+</div>
+
+<h2>9.4 Server Security</h2>
+
+<ul>
+    <li>Run Kazzy Agent on a <strong>VPS</strong> for 24/7 operation</li>
+    <li>Use <strong>firewall rules</strong> to restrict access</li>
+    <li>Enable <strong>SSH key authentication</strong> (disable password login)</li>
+    <li>Keep all software <strong>up to date</strong></li>
+    <li>Use <strong>VPN</strong> for remote access</li>
+    <li>Enable <strong>SSL/TLS</strong> for all connections</li>
+</ul>
+
+<h1 id="troubleshooting">10. Troubleshooting</h1>
+
+<h2>10.1 Common Connection Issues</h2>
+
+<p><strong>Problem: Cannot connect to exchange</strong></p>
+<ul>
+    <li>Verify API key and secret are correct (no extra spaces)</li>
+    <li>Check if IP is whitelisted on exchange</li>
+    <li>Ensure API has trading permissions enabled</li>
+    <li>Verify account is verified on the exchange</li>
+    <li>Check if exchange API is experiencing outages</li>
+</ul>
+
+<p><strong>Problem: API key invalid error</strong></p>
+<ul>
+    <li>Regenerate API keys on exchange</li>
+    <li>Check for extra spaces in key fields</li>
+    <li>Verify key hasn't expired</li>
+    <li>Ensure correct API key type (spot vs futures)</li>
+</ul>
+
+<h2>10.2 Trading Issues</h2>
+
+<p><strong>Problem: Orders not executing</strong></p>
+<ul>
+    <li>Check account has sufficient balance</li>
+    <li>Verify symbol is available on exchange</li>
+    <li>Check if market is open for the symbol</li>
+    <li>Review risk limits haven't been reached</li>
+    <li>Check minimum order size requirements</li>
+</ul>
+
+<p><strong>Problem: Position not closing</strong></p>
+<ul>
+    <li>Use Emergency Stop for immediate closure</li>
+    <li>Check internet connection</li>
+    <li>Verify API has 'Trade' permissions</li>
+    <li>Check if position already closed by exchange</li>
+</ul>
+
+<h2>10.3 Performance Issues</h2>
+
+<p><strong>Problem: Slow data updates</strong></p>
+<ul>
+    <li>Check internet connection speed</li>
+    <li>Disable unnecessary browser tabs/extensions</li>
+    <li>Use wired connection instead of WiFi</li>
+    <li>Close other bandwidth-intensive applications</li>
+    <li>Consider upgrading your server/VPS</li>
+</ul>
+
+<p><strong>Problem: AI not generating signals</strong></p>
+<ul>
+    <li>Ensure Poe API key is configured in Settings</li>
+    <li>Check AI model is selected</li>
+    <li>Verify exchange is connected with data access</li>
+    <li>Check API rate limits</li>
+    <li>Review error logs in Terminal panel</li>
+</ul>
+
+<h2>10.4 Getting Help</h2>
+
+<p>If you encounter issues not covered in this guide:</p>
+
+<ul>
+    <li>Check Kazzy Agent documentation online</li>
+    <li>Review exchange API documentation</li>
+    <li>Contact exchange support for API-specific issues</li>
+    <li>Check system logs for detailed error messages</li>
+</ul>
+
+<div class="disclaimer">
+    <p><strong>Disclaimer:</strong> This documentation is provided for educational purposes only. Trading financial instruments involves substantial risk and may not be suitable for all investors. Past performance does not guarantee future results. Users are solely responsible for their trading decisions and any resulting losses. Always conduct thorough research and consider consulting with a financial advisor before engaging in automated trading.</p>
+
+    <p>© 2026 Kazzy Agent. All rights reserved.</p>
+</div>
+
+</body>
+</html>

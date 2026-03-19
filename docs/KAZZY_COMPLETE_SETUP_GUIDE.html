@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kazzy Agent - Complete Setup & API Integration Guide</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #fff;
+            padding: 40px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .cover {
+            text-align: center;
+            padding: 80px 0;
+            border-bottom: 3px solid #3b82f6;
+            margin-bottom: 40px;
+        }
+
+        .cover h1 {
+            font-size: 42px;
+            color: #1a1a2e;
+            margin-bottom: 10px;
+            font-weight: 800;
+        }
+
+        .cover .subtitle {
+            font-size: 24px;
+            color: #3b82f6;
+            margin-bottom: 20px;
+        }
+
+        .cover .version {
+            font-size: 14px;
+            color: #666;
+        }
+
+        h2 {
+            font-size: 28px;
+            color: #1a1a2e;
+            margin: 50px 0 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e5e7eb;
+        }
+
+        h3 {
+            font-size: 20px;
+            color: #3b82f6;
+            margin: 30px 0 15px;
+        }
+
+        h4 {
+            font-size: 16px;
+            color: #1a1a2e;
+            margin: 20px 0 10px;
+        }
+
+        p {
+            margin-bottom: 15px;
+            color: #4b5563;
+        }
+
+        ul, ol {
+            margin: 15px 0 15px 30px;
+            color: #4b5563;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        strong {
+            color: #1a1a2e;
+        }
+
+        code {
+            background: #f3f4f6;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 14px;
+            color: #d946ef;
+        }
+
+        pre {
+            background: #1a1a2e;
+            color: #e5e7eb;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 20px 0;
+            font-size: 14px;
+        }
+
+        pre code {
+            background: none;
+            padding: 0;
+            color: #10b981;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 14px;
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border: 1px solid #e5e7eb;
+        }
+
+        th {
+            background: #f9fafb;
+            font-weight: 600;
+            color: #1a1a2e;
+        }
+
+        tr:nth-child(even) {
+            background: #f9fafb;
+        }
+
+        .note {
+            background: #eff6ff;
+            border-left: 4px solid #3b82f6;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .warning {
+            background: #fef3c7;
+            border-left: 4px solid #f59e0b;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .success {
+            background: #d1fae5;
+            border-left: 4px solid #10b981;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .toc {
+            background: #f9fafb;
+            padding: 30px;
+            border-radius: 12px;
+            margin: 30px 0;
+        }
+
+        .toc h2 {
+            margin-top: 0;
+            border: none;
+        }
+
+        .toc ul {
+            list-style: none;
+            margin: 0;
+        }
+
+        .toc li {
+            margin-bottom: 10px;
+        }
+
+        .toc a {
+            color: #3b82f6;
+            text-decoration: none;
+        }
+
+        .toc a:hover {
+            text-decoration: underline;
+        }
+
+        hr {
+            border: none;
+            height: 1px;
+            background: #e5e7eb;
+            margin: 40px 0;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 40px 0;
+            border-top: 1px solid #e5e7eb;
+            margin-top: 60px;
+            color: #666;
+            font-size: 14px;
+        }
+
+        @media print {
+            body {
+                padding: 20px;
+            }
+
+            .cover {
+                page-break-after: avoid;
+            }
+
+            h2, h3 {
+                page-break-after: avoid;
+            }
+
+            pre, table {
+                page-break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="cover">
+        <h1>Kazzy Agent</h1>
+        <div class="subtitle">Complete Setup & API Integration Guide</div>
+        <div class="version">Version 2.0 | March 2026</div>
+    </div>
+
+    <div class="toc">
+        <h2>Table of Contents</h2>
+        <ul>
+            <li><a href="#getting-started">Getting Started</a></li>
+            <li><a href="#platform-api-setup">Platform API Setup</a>
+                <ul>
+                    <li><a href="#binance-api">Binance API</a></li>
+                    <li><a href="#bybit-api">Bybit API</a></li>
+                    <li><a href="#coinbase-api">Coinbase API</a></li>
+                    <li><a href="#metatrader">MetaTrader 4/5</a></li>
+                    <li><a href="#ctrader">cTrader</a></li>
+                    <li><a href="#ibkr">Interactive Brokers</a></li>
+                    <li><a href="#alpaca">Alpaca</a></li>
+                </ul>
+            </li>
+            <li><a href="#ai-configuration">AI Configuration</a></li>
+            <li><a href="#trading-commands">Trading Commands</a></li>
+            <li><a href="#auto-trading">Auto-Trading Setup</a></li>
+            <li><a href="#risk-management">Risk Management</a></li>
+            <li><a href="#troubleshooting">Troubleshooting</a></li>
+        </ul>
+    </div>
+
+    <h2 id="getting-started">Getting Started</h2>
+
+    <h3>System Requirements</h3>
+    <ul>
+        <li>Modern web browser (Chrome, Firefox, Safari, Edge)</li>
+        <li>Internet connection</li>
+        <li>Trading account(s) with supported platforms</li>
+    </ul>
+
+    <h3>Initial Setup Steps</h3>
+    <ol>
+        <li><strong>Access the Application</strong> - Navigate to the deployed URL</li>
+        <li><strong>Connect Your Exchanges</strong> - Go to Settings tab and enter API credentials</li>
+        <li><strong>Configure AI</strong> - Choose AI provider and enter API key</li>
+        <li><strong>Enable Auto-Trading</strong> - Toggle auto-trading and configure strategies</li>
+    </ol>
+
+    <hr>
+
+    <h2 id="platform-api-setup">Platform API Setup</h2>
+
+    <h3 id="binance-api">Binance API</h3>
+    <p>Binance is the world's largest cryptocurrency exchange, offering spot trading, futures, and margin.</p>
+
+    <h4>How to Get Binance API Key</h4>
+    <ol>
+        <li><strong>Log into Binance</strong> - Visit <a href="https://www.binance.com">binance.com</a> and complete login</li>
+        <li><strong>Navigate to API Management</strong> - Click profile icon → API Management</li>
+        <li><strong>Create New API Key</strong>
+            <ul>
+                <li>Click "Create API"</li>
+                <li>Select "System generated"</li>
+                <li>Enter label (e.g., "Kazzy Agent")</li>
+                <li>Complete security verification</li>
+            </ul>
+        </li>
+        <li><strong>Configure Permissions</strong>
+            <ul>
+                <li>Enable "Enable Spot & Margin Trading"</li>
+                <li>Enable "Enable Futures"</li>
+                <li>Disable "Enable Withdrawals" (security)</li>
+            </ul>
+        </li>
+    </ol>
+
+    <div class="warning">
+        <strong>Important Security Notes:</strong>
+        <ul>
+            <li>Never share your API secret with anyone</li>
+            <li>Enable IP restriction if possible</li>
+            <li>Use trade-only permissions</li>
+            <li>Regularly rotate your API keys</li>
+        </ul>
+    </div>
+
+    <h3 id="bybit-api">Bybit API</h3>
+    <p>Bybit is a popular derivatives exchange offering USDT perpetual, inverse contracts, and spot trading.</p>
+
+    <h4>How to Get Bybit API Key</h4>
+    <ol>
+        <li><strong>Log into Bybit</strong> - Visit <a href="https://www.bybit.com">bybit.com</a></li>
+        <li><strong>Access API Settings</strong> - Settings → API</li>
+        <li><strong>Create API Key</strong>
+            <ul>
+                <li>Click "Create New Key"</li>
+                <li>Select permissions: Trade, Order</li>
+                <li>Disable withdrawals</li>
+            </ul>
+        </li>
+    </ol>
+
+    <table>
+        <tr><th>Parameter</th><th>Value</th></tr>
+        <tr><td>Exchange ID</td><td>bybit</td></tr>
+        <tr><td>Testnet Available</td><td>Yes</td></tr>
+        <tr><td>Max Leverage</td><td>100x</td></tr>
+        <tr><td>Supported Assets</td><td>USDT Perp, Inverse, Spot</td></tr>
+    </table>
+
+    <h3 id="coinbase-api">Coinbase API</h3>
+    <p>Coinbase is a regulated US-based cryptocurrency exchange with strong security compliance.</p>
+
+    <h4>How to Get Coinbase API Key</h4>
+    <ol>
+        <li><strong>Log into Coinbase</strong> - Visit <a href="https://www.coinbase.com">coinbase.com</a></li>
+        <li><strong>Navigate to API</strong> - Settings → API</li>
+        <li><strong>Create API Key</strong>
+            <ul>
+                <li>View accounts permission</li>
+                <li>Trade permission</li>
+                <li>Convert permission</li>
+            </ul>
+        </li>
+    </ol>
+
+    <table>
+        <tr><th>Permission</th><th>Required</th><th>Purpose</th></tr>
+        <tr><td>View Accounts</td><td>Yes</td><td>Check balances</td></tr>
+        <tr><td>Trade</td><td>Yes</td><td>Execute trades</td></tr>
+        <tr><td>Convert</td><td>Yes</td><td>Swap assets</td></tr>
+        <tr><td>Transfer</td><td>No</td><td>Security</td></tr>
+    </table>
+
+    <h3 id="metatrader">MetaTrader 4/5</h3>
+    <p>MetaTrader is the industry standard for forex and CFD trading, featuring Expert Advisors (EAs).</p>
+
+    <h4>MT5 Setup (Recommended)</h4>
+    <ol>
+        <li><strong>Download MetaTrader 5</strong> - From your broker or <a href="https://www.metatrader5.com">metatrader5.com</a></li>
+        <li><strong>Install and Login</strong> - File → Login to Trade Account</li>
+        <li><strong>Enable DLL Imports</strong> - Tools → Options → Expert Advisors
+            <ul>
+                <li>Allow DLL imports ✓</li>
+                <li>Allow external experts ✓</li>
+            </ul>
+        </li>
+        <li><strong>Install Kazzy EA</strong> - Copy to MQL5 → Experts folder</li>
+    </ol>
+
+    <h3 id="ctrader">cTrader</h3>
+    <p>cTrader is a professional forex and CFD trading platform by Spotware.</p>
+
+    <h4>Setup Steps</h4>
+    <ol>
+        <li><strong>Download cTrader</strong> - From <a href="https://www.spotware.com">spotware.com</a></li>
+        <li><strong>Create cTrader ID</strong> - Sign up at spotware.com</li>
+        <li><strong>Enable API Access</strong> - Tools → cTrader ID → Allow algorithmic trading</li>
+    </ol>
+
+    <h3 id="ibkr">Interactive Brokers</h3>
+    <p>Interactive Brokers offers global trading across stocks, options, futures, forex, and commodities.</p>
+
+    <h4>How to Get IBKR API Key</h4>
+    <ol>
+        <li><strong>Open IBKR Account</strong> - Visit <a href="https://www.interactivebrokers.com">interactivebrokers.com</a></li>
+        <li><strong>Configure API Access</strong> - Settings → API Settings → Create API Key</li>
+        <li><strong>Set Permissions</strong> - Market Data, Trade, Portfolio</li>
+    </ol>
+
+    <table>
+        <tr><th>Parameter</th><th>Value</th></tr>
+        <tr><td>Gateway</td><td>interactivebrokers</td></tr>
+        <tr><td>Port (Paper)</td><td>4002</td></tr>
+        <tr><td>Port (Live)</td><td>4001</td></tr>
+        <tr><td>Assets</td><td>Stocks, Options, Futures, Forex</td></tr>
+    </table>
+
+    <h3 id="alpaca">Alpaca</h3>
+    <p>Alpaca is a commission-free stock trading API, perfect for US equities.</p>
+
+    <h4>How to Get Alpaca API Key</h4>
+    <ol>
+        <li><strong>Sign Up</strong> - Visit <a href="https://alpaca.markets">alpaca.markets</a></li>
+        <li><strong>Generate API Keys</strong> - Dashboard → Paper/Live Trading → Generate</li>
+    </ol>
+
+    <table>
+        <tr><th>Parameter</th><th>Value</th></tr>
+        <tr><td>Paper Endpoint</td><td>paper-api.alpaca.markets</td></tr>
+        <tr><td>Live Endpoint</td><td>api.alpaca.markets</td></tr>
+        <tr><td>Markets</td><td>US Equities</td></tr>
+    </table>
+
+    <hr>
+
+    <h2 id="ai-configuration">AI Configuration</h2>
+
+    <h3>Poe AI (Recommended)</h3>
+    <p>Poe offers access to multiple AI models including Claude, GPT-4, and Llama.</p>
+
+    <h4>Setup Steps</h4>
+    <ol>
+        <li>Visit <a href="https://poe.com/api">poe.com/api</a></li>
+        <li>Click "Create API Key"</li>
+        <li>Copy key (starts with <code>poa_</code>)</li>
+        <li>Select AI model in Kazzy settings</li>
+    </ol>
+
+    <table>
+        <tr><th>Model</th><th>Best For</th><th>Speed</th></tr>
+        <tr><td>Claude Sonnet</td><td>General analysis</td><td>Fast</td></tr>
+        <tr><td>Claude Opus</td><td>Deep analysis</td><td>Slow</td></tr>
+        <tr><td>GPT-4o</td><td>Multimodal</td><td>Fast</td></tr>
+        <tr><td>Llama 3</td><td>Budget option</td><td>Fast</td></tr>
+    </table>
+
+    <h3>OpenAI</h3>
+    <p>OpenAI's GPT models offer state-of-the-art language understanding.</p>
+
+    <h4>Setup Steps</h4>
+    <ol>
+        <li>Visit <a href="https://platform.openai.com">platform.openai.com</a></li>
+        <li>Create account and go to API Keys</li>
+        <li>Click "Create new secret key"</li>
+        <li>Copy key (starts with <code>sk-</code>)</li>
+    </ol>
+
+    <hr>
+
+    <h2 id="trading-commands">Trading Commands</h2>
+
+    <h3>Basic Commands</h3>
+
+    <h4>Buy/Sell Orders</h4>
+    <pre><code>buy 0.01 BTC          → Market buy Bitcoin
+buy 1 ETH             → Market buy Ethereum
+sell 0.5 SOL          → Market sell Solana
+buy limit BTC 45000   → Limit buy at $45,000</code></pre>
+
+    <h4>Position Management</h4>
+    <pre><code>show positions         → View open positions
+close BTC             → Close BTC position
+close all             → Close all positions</code></pre>
+
+    <h4>Market Information</h4>
+    <pre><code>price BTC             → Get BTC current price
+balance               → Show account balance
+portfolio             → Show full portfolio</code></pre>
+
+    <h3>AI Commands</h3>
+
+    <pre><code>auto on               → Enable auto-trading
+auto off              → Disable auto-trading
+analyze BTC           → AI analysis of Bitcoin
+forecast AAPL         → Stock price forecast</code></pre>
+
+    <h3>Advanced Commands</h3>
+    <pre><code>limit buy 0.1 BTC @ 40000      → Limit order
+stop loss BTC @ 38000           → Set stop loss
+take profit ETH @ 3500          → Set take profit
+trailing stop 2%               → Enable trailing stop</code></pre>
+
+    <hr>
+
+    <h2 id="auto-trading">Auto-Trading Setup</h2>
+
+    <h3>Step-by-Step Configuration</h3>
+    <ol>
+        <li><strong>Connect Exchange</strong> - Settings → Exchange Connections</li>
+        <li><strong>Configure Risk Parameters</strong></li>
+        <li><strong>Select Trading Strategies</strong></li>
+        <li><strong>Enable Auto-Trading</strong></li>
+    </ol>
+
+    <table>
+        <tr><th>Parameter</th><th>Conservative</th><th>Moderate</th><th>Aggressive</th></tr>
+        <tr><td>Risk/Trade</td><td>1-2%</td><td>2-5%</td><td>5-10%</td></tr>
+        <tr><td>Max Positions</td><td>3</td><td>5</td><td>10</td></tr>
+        <tr><td>Max Daily Loss</td><td>5%</td><td>10%</td><td>20%</td></tr>
+    </table>
+
+    <h3>Trading Strategies</h3>
+    <table>
+        <tr><th>Strategy</th><th>Description</th><th>Best Market</th></tr>
+        <tr><td>RSI</td><td>Buy oversold, sell overbought</td><td>Ranging</td></tr>
+        <tr><td>MA Crossover</td><td>Trend following</td><td>Trending</td></tr>
+        <tr><td>Grid</td><td>Range-bound orders</td><td>Sideways</td></tr>
+    </table>
+
+    <hr>
+
+    <h2 id="risk-management">Risk Management</h2>
+
+    <h3>Position Sizing Formula</h3>
+    <p><code>Position Size = Account × Risk% / (Entry × Stop Loss%)</code></p>
+
+    <h3>Example Calculation</h3>
+    <ul>
+        <li>Account: $10,000</li>
+        <li>Risk: 2% = $200</li>
+        <li>Entry: $45,000</li>
+        <li>Stop Loss: 5% = $2,250</li>
+    </ul>
+
+    <div class="success">
+        <strong>Position = $10,000 × 0.02 / ($45,000 × 0.05) = 0.089 BTC</strong>
+    </div>
+
+    <h3>Risk Rules</h3>
+    <table>
+        <tr><th>Rule</th><th>Conservative</th><th>Moderate</th><th>Aggressive</th></tr>
+        <tr><td>Max Risk/Trade</td><td>2%</td><td>5%</td><td>10%</td></tr>
+        <tr><td>Max Daily Loss</td><td>5%</td><td>10%</td><td>20%</td></tr>
+        <tr><td>Max Positions</td><td>3</td><td>5</td><td>10</td></tr>
+    </table>
+
+    <hr>
+
+    <h2 id="troubleshooting">Troubleshooting</h2>
+
+    <h3>Common Issues</h3>
+
+    <table>
+        <tr><th>Issue</th><th>Cause</th><th>Solution</th></tr>
+        <tr><td>Connection Failed</td><td>Invalid API key</td><td>Double-check credentials</td></tr>
+        <tr><td>Connection Failed</td><td>Wrong permissions</td><td>Enable trading permission</td></tr>
+        <tr><td>Orders Not Executing</td><td>Insufficient balance</td><td>Fund account</td></tr>
+        <tr><td>AI Not Responding</td><td>API key invalid</td><td>Re-enter API key</td></tr>
+    </table>
+
+    <h3>API Error Codes</h3>
+    <table>
+        <tr><th>Code</th><th>Meaning</th><th>Action</th></tr>
+        <tr><td>400</td><td>Bad Request</td><td>Check parameters</td></tr>
+        <tr><td>401</td><td>Unauthorized</td><td>Verify API key</td></tr>
+        <tr><td>403</td><td>Forbidden</td><td>Check permissions</td></tr>
+        <tr><td>429</td><td>Rate Limited</td><td>Wait and retry</td></tr>
+        <tr><td>500</td><td>Server Error</td><td>Try again later</td></tr>
+    </table>
+
+    <hr>
+
+    <div class="footer">
+        <p><strong>Kazzy Agent - Your AI-Powered Trading Partner</strong></p>
+        <p>Version 2.0 | March 2026</p>
+        <p>For the latest updates and documentation, visit our support portal.</p>
+    </div>
+</body>
+</html>

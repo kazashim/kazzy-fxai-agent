@@ -25,3 +25,6 @@ pydantic-settings>=2.0.0
 
 # Logging
 loguru>=0.7.0
+
+# AI Integration
+openai>=1.0.0

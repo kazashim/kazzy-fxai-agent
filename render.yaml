@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: kazzy-agent
+    env: python
+    buildCommand: pip install -r backend/requirements.txt
+    startCommand: cd backend && python api_server.py
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.10"
+    autoDeploy: true
