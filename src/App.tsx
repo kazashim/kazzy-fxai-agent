@@ -56,6 +56,14 @@ import {
 } from 'lucide-react'
 import { createChart, IChartApi, Time, CandlestickSeries } from 'lightweight-charts'
 
+// Helper function
+const formatNumber = (num: number, decimals: number = 0) => {
+  if (num >= 1000000000) return (num / 1000000000).toFixed(1) + 'B'
+  if (num >= 1000000) return (num / 1000000).toFixed(1) + 'M'
+  if (num >= 1000) return (num / 1000).toFixed(1) + 'K'
+  return num.toFixed(decimals)
+}
+
 // Types
 type AssetClass = 'forex' | 'crypto' | 'stocks' | 'commodities' | 'indices' | 'options' | 'futures' | 'bonds' | 'cfds'
 
@@ -302,6 +310,9 @@ function App() {
   const [copiedSignal, setCopiedSignal] = useState<string | null>(null)
   const [chartContainer, setChartContainer] = useState<HTMLDivElement | null>(null)
   const [chart, setChart] = useState<IChartApi | null>(null)
+  const [chartSymbol, setChartSymbol] = useState('BTC/USDT')
+  const [candlestickData, setCandlestickData] = useState<{ time: Time; open: number; high: number; low: number; close: number }[]>([])
+  const [chartTimeframe, setChartTimeframe] = useState('1H')
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
   // Automation features
@@ -462,6 +473,100 @@ function App() {
     setSignalsLastUpdate(new Date())
   }, [])
 
+  // Fetch real candlestick data from CoinGecko
+  const fetchCandlestickData = useCallback(async (symbol: string, timeframe: string) => {
+    try {
+      // Map symbol to CoinGecko IDs
+      const symbolMap: Record<string, string> = {
+        'BTC/USDT': 'bitcoin',
+        'ETH/USDT': 'ethereum',
+        'SOL/USDT': 'solana',
+        'XRP/USDT': 'ripple',
+        'ADA/USDT': 'cardano',
+        'DOGE/USDT': 'dogecoin',
+        'XAU/USD': 'gold',
+        'EUR/USD': 'eur',
+      }
+
+      const coinId = symbolMap[symbol]
+      if (!coinId) {
+        // Generate simulated data for unsupported symbols
+        generateSimulatedCandlestickData(symbol)
+        return
+      }
+
+      // Map timeframe to days (approximation)
+      const daysMap: Record<string, number> = {
+        '1H': 2,
+        '4H': 7,
+        '1D': 30,
+        '1W': 90,
+      }
+      const days = daysMap[timeframe] || 7
+
+      const response = await fetch(
+        `https://api.coingecko.com/api/v3/coins/${coinId}/ohlc?vs_currency=usd&days=${days}`
+      )
+
+      if (!response.ok) throw new Error('Failed to fetch data')
+
+      const data = await response.json()
+
+      // Transform CoinGecko OHLC format to our format
+      const transformedData = data.map((item: number[]) => ({
+        time: (item[0] / 1000) as Time,
+        open: item[1],
+        high: item[2],
+        low: item[3],
+        close: item[4],
+      }))
+
+      setCandlestickData(transformedData)
+
+      // Update ticker price with latest close
+      setTickers(prev => prev.map(t => {
+        if (t.symbol === symbol && transformedData.length > 0) {
+          const latest = transformedData[transformedData.length - 1].close
+          const prevPrice = transformedData[transformedData.length - 2]?.close || latest
+          return {
+            ...t,
+            price: latest,
+            change: latest - prevPrice,
+            changePercent: ((latest - prevPrice) / prevPrice) * 100
+          }
+        }
+        return t
+      }))
+    } catch (error) {
+      console.error('Failed to fetch candlestick data:', error)
+      generateSimulatedCandlestickData(symbol)
+    }
+  }, [])
+
+  // Generate simulated candlestick data when API fails
+  const generateSimulatedCandlestickData = (symbol: string) => {
+    const basePrice = symbol === 'BTC/USDT' ? 67500 :
+                      symbol === 'ETH/USDT' ? 3450 :
+                      symbol === 'EUR/USD' ? 1.0850 :
+                      symbol === 'XAU/USD' ? 2350 : 100
+
+    const data: { time: Time; open: number; high: number; low: number; close: number }[] = []
+    let price = basePrice
+
+    for (let i = 100; i >= 0; i--) {
+      const time = Math.floor(Date.now() / 1000) - i * 3600
+      const change = (Math.random() - 0.5) * 0.02 * price
+      const close = price + change
+      const high = Math.max(price, close) * (1 + Math.random() * 0.005)
+      const low = Math.min(price, close) * (1 - Math.random() * 0.005)
+
+      data.push({ time: time as Time, open: price, high, low, close })
+      price = close
+    }
+
+    setCandlestickData(data)
+  }
+
   // Auto-refresh signals every 60 seconds
   useEffect(() => {
     fetchRealSignals()
@@ -525,9 +630,29 @@ function App() {
     return () => clearInterval(interval)
   }, [])
 
-  // Initialize chart
+  // Initialize chart - only when container is available and no chart exists
   useEffect(() => {
-    if (chartContainer && !chart) {
+    if (!chartContainer) return
+
+    // Small delay to ensure container has dimensions when tab becomes active
+    const initChart = () => {
+      // If chart already exists, just resize it
+      if (chart) {
+        if (chartContainer.clientWidth > 0 && chartContainer.clientHeight > 0) {
+          chart.applyOptions({
+            width: chartContainer.clientWidth,
+            height: chartContainer.clientHeight
+          })
+        }
+        return
+      }
+
+      // Only create chart if container has valid dimensions
+      if (chartContainer.clientWidth === 0 || chartContainer.clientHeight === 0) {
+        return
+      }
+
+      // Create new chart
       const newChart = createChart(chartContainer, {
         width: chartContainer.clientWidth,
         height: chartContainer.clientHeight,
@@ -553,34 +678,57 @@ function App() {
         wickDownColor: '#f23645',
       })
 
-      const sampleData: { time: Time; open: number; high: number; low: number; close: number }[] = []
-      let basePrice = 1.0850
-      const now = new Date()
-      for (let i = 100; i >= 0; i--) {
-        const time = new Date(now.getTime() - i * 3600000)
-        const open = basePrice
-        const change = (Math.random() - 0.5) * 0.003
-        const close = open + change
-        const high = Math.max(open, close) + Math.random() * 0.001
-        const low = Math.min(open, close) - Math.random() * 0.001
-        basePrice = close
-        sampleData.push({
-          time: time.getTime() / 1000 as Time,
-          open, high, low, close
-        })
-      }
+      // Initial data fetch
+      fetchCandlestickData(chartSymbol, chartTimeframe)
 
-      candlestickSeries.setData(sampleData)
-      newChart.timeScale().fitContent()
+      // Store series reference for updates
+      ;(newChart as any)._candlestickSeries = candlestickSeries
       setChart(newChart)
     }
 
-    return () => { if (chart) chart.remove() }
+    // Try immediately, then with a small delay if dimensions are 0
+    initChart()
+    if (chartContainer.clientWidth === 0) {
+      setTimeout(initChart, 100)
+    }
   }, [chartContainer])
+
+  // Resize chart when dashboard tab becomes active
+  useEffect(() => {
+    if (activeTab === 'dashboard' && chart && chartContainer) {
+      // Use requestAnimationFrame to ensure DOM has updated
+      requestAnimationFrame(() => {
+        if (chartContainer.clientWidth > 0 && chartContainer.clientHeight > 0) {
+          chart.applyOptions({
+            width: chartContainer.clientWidth,
+            height: chartContainer.clientHeight
+          })
+        }
+      })
+    }
+  }, [activeTab, chart, chartContainer])
+
+  // Update chart data when candlestickData changes
+  useEffect(() => {
+    if (chart && candlestickData.length > 0) {
+      const candlestickSeries = (chart as any)._candlestickSeries
+      if (candlestickSeries) {
+        candlestickSeries.setData(candlestickData)
+        chart.timeScale().fitContent()
+      }
+    }
+  }, [chart, candlestickData])
+
+  // Fetch new data when symbol or timeframe changes
+  useEffect(() => {
+    if (chart) {
+      fetchCandlestickData(chartSymbol, chartTimeframe)
+    }
+  }, [chartSymbol, chartTimeframe, fetchCandlestickData])
 
   useEffect(() => {
     const handleResize = () => {
-      if (chart && chartContainer) {
+      if (chart && chartContainer && chartContainer.clientWidth > 0) {
         chart.applyOptions({ width: chartContainer.clientWidth })
       }
     }
@@ -1457,31 +1605,56 @@ CORPORATE: Investment Grade | High Yield
         )}
 
         <div className="p-4 space-y-4">
+          {/* Persistent Chart - Always rendered and visible */}
+          <div className="bg-[#151a21] rounded-xl border border-[#2a3441] overflow-hidden">
+            <div className="flex items-center justify-between p-3 border-b border-[#2a3441]">
+              <div className="flex items-center gap-3">
+                <select
+                  value={chartSymbol}
+                  onChange={(e) => setChartSymbol(e.target.value)}
+                  className="bg-[#1c222b] border border-[#2a3441] rounded-lg px-3 py-1.5 text-sm"
+                >
+                  <option value="BTC/USDT">BTC/USDT</option>
+                  <option value="ETH/USDT">ETH/USDT</option>
+                  <option value="SOL/USDT">SOL/USDT</option>
+                  <option value="XRP/USDT">XRP/USDT</option>
+                  <option value="ADA/USDT">ADA/USDT</option>
+                  <option value="DOGE/USDT">DOGE/USDT</option>
+                  <option value="EUR/USD">EUR/USD</option>
+                  <option value="XAU/USD">XAU/USD</option>
+                </select>
+                <div className="flex gap-1">
+                  {['1H', '4H', '1D', '1W'].map(tf => (
+                    <button
+                      key={tf}
+                      onClick={() => setChartTimeframe(tf)}
+                      className={`px-2.5 py-1 rounded text-xs transition-colors ${chartTimeframe === tf ? 'bg-blue-500/20 text-blue-400' : 'hover:bg-[#1c222b]'}`}
+                    >
+                      {tf}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              {candlestickData.length > 0 && (
+                <div className="flex items-center gap-2 text-sm">
+                  <span className="text-slate-400">
+                    ${candlestickData[candlestickData.length - 1]?.close.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                  </span>
+                  <RefreshCw
+                    className="w-4 h-4 text-slate-500 cursor-pointer hover:text-white"
+                    onClick={() => fetchCandlestickData(chartSymbol, chartTimeframe)}
+                  />
+                </div>
+              )}
+            </div>
+            <div ref={setChartContainer} className="h-80" />
+          </div>
+
           {/* Dashboard View */}
           {activeTab === 'dashboard' && (
             <>
-              <div className="grid grid-cols-1 xl:grid-cols-3 gap-4">
-                <div className="xl:col-span-2 bg-[#151a21] rounded-xl border border-[#2a3441] overflow-hidden">
-                  <div className="flex items-center justify-between p-3 border-b border-[#2a3441]">
-                    <div className="flex items-center gap-3">
-                      <select className="bg-[#1c222b] border border-[#2a3441] rounded-lg px-3 py-1.5 text-sm">
-                        <option>EUR/USD</option>
-                        <option>GBP/USD</option>
-                        <option>BTC/USDT</option>
-                        <option>XAU/USD</option>
-                      </select>
-                      <div className="flex gap-1">
-                        {['1H', '4H', '1D', '1W'].map(tf => (
-                          <button key={tf} className={`px-2.5 py-1 rounded text-xs ${tf === '4H' ? 'bg-blue-500/20 text-blue-400' : 'hover:bg-[#1c222b]'}`}>
-                            {tf}
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                  <div ref={setChartContainer} className="h-80" />
-                </div>
-
+              <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
+                {/* Live Signals Panel */}
                 <div className="bg-[#151a21] rounded-xl border border-[#2a3441] overflow-hidden">
                   <div className="p-3 border-b border-[#2a3441] flex items-center justify-between">
                     <div className="flex items-center gap-2">
