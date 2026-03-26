@@ -55,11 +55,25 @@ manager = ConnectionManager()
 # Initialize trading engine
 async def initialize_engine():
     global trading_engine
-    from kazzy_trading import KazzyTradingEngine
-    trading_engine = KazzyTradingEngine()
-    await trading_engine.initialize()
-    await trading_engine.start()
-    logger.info("Trading engine initialized")
+    try:
+        from kazzy_trading import KazzyTradingEngine
+        trading_engine = KazzyTradingEngine()
+        await trading_engine.initialize()
+        await trading_engine.start()
+        logger.info("Trading engine initialized")
+    except Exception as e:
+        logger.error(f"Failed to initialize trading engine: {e}")
+        # Create a dummy engine so app can still run
+        class DummyEngine:
+            def get_status(self): return {"status": "error", "message": str(e)}
+            def is_running(self): return False
+        trading_engine = DummyEngine()
+
+
+async def initialize_engine_background():
+    """Start engine in background so app can start quickly"""
+    import asyncio
+    asyncio.create_task(initialize_engine())
 
 
 # Pydantic models
@@ -89,12 +103,15 @@ class StrategyRequest(BaseModel):
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # Startup
-    await initialize_engine()
+    # Startup - don't block, initialize in background
+    asyncio.create_task(initialize_engine())
     yield
     # Shutdown
-    if trading_engine:
-        await trading_engine.stop()
+    if trading_engine and hasattr(trading_engine, 'stop'):
+        try:
+            await trading_engine.stop()
+        except:
+            pass
 
 
 # Create FastAPI app
@@ -113,6 +130,12 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+
+# Health check endpoint (for Render)
+@app.get("/health")
+async def health():
+    return {"status": "ok", "service": "kazzy-agent-api"}
 
 
 # Health check
