@@ -1,8 +1,8 @@
 # render.yaml - Kazzy Agent Deployment Configuration
-# Place this file in your project root for automatic deployment
+# Deploys both frontend and backend as Web Services
 
 services:
-  # Backend Web Service
+  # Backend Web Service (Python/FastAPI)
   - type: web
     name: kazzy-backend
     region: oregon
@@ -30,3 +30,20 @@ services:
         sync: false
       - key: POE_API_KEY
         sync: false
+
+  # Frontend Web Service (Node.js/React)
+  - type: web
+    name: kazzy-frontend
+    region: oregon
+    plan: free
+    runtime: node
+    buildCommand: npm install && npm run build
+    startCommand: npx serve dist -l $PORT
+    envVars:
+      - key: NODE_VERSION
+        value: "18"
+      - key: VITE_API_URL
+        fromService:
+          type: web
+          name: kazzy-backend
+          envVarKey: RENDER_EXTERNAL_URL
